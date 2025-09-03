@@ -5,7 +5,7 @@ on:
     inputs:
       ssh:
         description: 'Enable SSH connection?'
-        required: false
+        required: true
         default: 'off'
         type: choice
         options:
