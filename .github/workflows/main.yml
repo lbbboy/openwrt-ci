@@ -23,5 +23,5 @@ jobs:
         env:
           TELEGRAM_TOKEN : ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_TO : ${{ secrets.TELEGRAM_TO }}
-        uses: kiddin9/debugger-action@master
+        uses: garypang13/debugger-action@master
         if: ${{ github.event.inputs.ssh == 'true' }}
