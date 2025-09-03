@@ -4,13 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       ssh:
-        description: 'Enable SSH connection?'
+        description: 'Enable SSH connection? (on/off)'
         required: true
         default: 'off'
-        type: choice
-        options:
-          - on
-          - off
+        type: string
+  
   schedule:
     - cron: 0 19 * * *
 
