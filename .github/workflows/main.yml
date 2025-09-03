@@ -1,0 +1,24 @@
+name: SSH Control Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'Enable SSH connection? (on/off)'
+        required: true
+        default: 'off'
+        type: string
+        
+jobs:
+  ssh-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH connection to Actions
+        uses: lbbboy/ssh2actions@main
+        if: ${{ github.event.inputs.ssh == 'on' }}
+        with:
+          mode: ngrok
+        env:
+          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+          NGROK_REGION: us
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
