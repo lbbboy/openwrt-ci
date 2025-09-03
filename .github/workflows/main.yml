@@ -6,7 +6,7 @@ on:
       ssh:
         description: 'Enable SSH connection?'
         required: true
-        default: 'off'
+        default: 'on'
         type: choice
         options:
           - on
