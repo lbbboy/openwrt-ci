@@ -2,6 +2,15 @@ name: IPQ60XX-24.10-6.12-WIFI
 
 on:
   workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'Enable SSH connection?'
+        required: true
+        default: 'off'
+        type: choice
+        options:
+          - on
+          - off
   schedule:
     - cron: 0 19 * * *
 
@@ -107,7 +116,17 @@ jobs:
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
-
+        
+    - name: SSH connection to Actions
+      uses: lbbboy/ssh2actions@main
+      with:
+        mode: ngrok
+      if: ${{ github.event.inputs.ssh == 'on' }}
+      env:
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+        NGROK_REGION: us
+        SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+        
     - name: Compile Firmware(开始编译固件)
       id: compile
       run: |
