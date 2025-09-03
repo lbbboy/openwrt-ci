@@ -22,7 +22,7 @@ env:
   DIY_SCRIPT: diy-script.sh
   CLASH_KERNEL: amd64
   CACHE_TOOLCHAIN: true
-  UPLOAD_BIN_DIR: false
+  UPLOAD_BIN_DIR: true
   FIRMWARE_RELEASE: true
   FIRMWARE_TAG: IPQ60XX-24.10-6.12-WIFI
   TZ: Asia/Shanghai
@@ -185,3 +185,9 @@ jobs:
           ### 🧊 固件版本
           - 固件编译前最后一次➦[主源码](${{ env.REPO_URL }})更新记录
           - ${{ env.VERSION_INFO }}
+
+    - name: Telegram notification
+      if: env.TELEGRAM_TOKEN && ! contains(github.event.action, 'notg')
+      continue-on-error: true
+      run: |
+        curl -k --data chat_id="${{ env.TELEGRAM_CHAT_ID }}" --data "text=🎉 OpenWrt ${{ env.VERSION }} ${{matrix.target}} 编译成功 😋  https://dl.openwrt.ai/firmware/${{matrix.target}}/  ${{ env.COWURL }}   ${{ env.WETRANS }} 🚀" "https://api.telegram.org/bot${{ env.TELEGRAM_TOKEN }}/sendMessage"
