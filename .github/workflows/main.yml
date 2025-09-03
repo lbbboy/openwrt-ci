@@ -6,11 +6,11 @@ on:
       ssh:
         description: 'Enable SSH connection?'
         required: true
-        default: 'true'
+        default: 'false'
         type: choice
         options:
+          - false
           - true
-          - false        
 
 jobs:
   ssh-job:
