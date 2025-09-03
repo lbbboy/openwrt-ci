@@ -1,0 +1,45 @@
+name: Build ImmortalWRT
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "选择要编译的 ImmortalWRT 分支"
+        required: true
+        default: "main"
+        type: choice
+        options:
+          - main
+          - owrt
+      ssh:
+        description: 'Enable SSH connection?'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - false
+          - true
+env:
+  TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+  TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+  TZ: Asia/Shanghai
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout workflow repo
+        uses: actions/checkout@v4
+
+      - name: Clone ImmortalWRT source
+        run: |
+          git clone https://github.com/VIKINGYFY/immortalwrt.git immortalwrt -b ${{ github.event.inputs.branch }}
+          cd immortalwrt
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+      - name: SSH connection to Actions
+        env:
+          TELEGRAM_TOKEN : ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        uses: garypang13/debugger-action@master
+        if: ${{ github.event.inputs.ssh == 'true' }}
