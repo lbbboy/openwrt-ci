@@ -4,10 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       ssh:
-        description: 'Enable SSH connection? (on/off)'
+        description: 'Enable SSH connection?'
         required: true
-        default: 'off'
-        type: string
+        default: 'false'
+        type: choice
+        options:
+          - false
+          - true
   
   schedule:
     - cron: 0 19 * * *
@@ -116,14 +119,8 @@ jobs:
         find dl -size -1024c -exec rm -f {} \;
         
     - name: SSH connection to Actions
-      uses: lbbboy/ssh2actions@main
-      with:
-        mode: ngrok
-      if: ${{ github.event.inputs.ssh == 'on' }}
-      env:
-        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
-        NGROK_REGION: us
-        SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+      uses: kiddin9/debugger-action@master
+      if: ${{ github.event.inputs.ssh == 'true' }}
         
     - name: Compile Firmware(开始编译固件)
       id: compile
