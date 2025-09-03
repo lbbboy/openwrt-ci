@@ -6,11 +6,8 @@ on:
       ssh:
         description: 'Enable SSH connection?'
         required: true
-        default: 'on'
+        default: 'true'
         type: choice
-        options:
-          - on
-          - off
 
 jobs:
   ssh-job:
@@ -21,4 +18,4 @@ jobs:
 
       - name: SSH connection to Actions
         uses: kiddin9/debugger-action@master
-        if: ${{ github.event.inputs.ssh == 'on' || github.event.inputs.ssh == 'true' }}
+        if: ${{ github.event.inputs.ssh == 'true' }}
