@@ -4,21 +4,21 @@ on:
   workflow_dispatch:
     inputs:
       ssh:
-        description: 'Enable SSH connection? (on/off)'
+        description: 'Enable SSH connection?'
         required: true
         default: 'off'
-        type: string
-        
+        type: choice
+        options:
+          - on
+          - off
+
 jobs:
   ssh-job:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: SSH connection to Actions
-        uses: lbbboy/ssh2actions@main
-        if: ${{ github.event.inputs.ssh == 'on' }}
-        with:
-          mode: ngrok
-        env:
-          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
-          NGROK_REGION: us
-          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+        uses: kiddin9/debugger-action@master
+        if: ${{ github.event.inputs.ssh == 'on' || github.event.inputs.ssh == 'true' }}
