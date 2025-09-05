@@ -1,4 +1,4 @@
-name: Build ImmortalWRT
+name: Build ImmortalWRT VIKINGYFY
 
 on:
   workflow_dispatch:
