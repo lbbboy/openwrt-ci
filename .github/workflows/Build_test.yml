@@ -37,6 +37,7 @@ jobs:
           cd immortalwrt
           ./scripts/feeds update -a
           ./scripts/feeds install -a
+          
       - name: SSH connection to Actions
         env:
           TELEGRAM_TOKEN : ${{ secrets.TELEGRAM_TOKEN }}
