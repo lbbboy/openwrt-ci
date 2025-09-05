@@ -34,7 +34,7 @@ jobs:
 
       - name: Clone ImmortalWRT source
         run: |
-          git clone --depth=1 --single-branch $REPO_URL -b ${{ github.event.inputs.branch }} ImmortalWRT
+          git clone --depth=1 --single-branch $REPO_URL -b ${{ github.event.inputs.branch }}
           cd immortalwrt
           cp $GITHUB_WORKSPACE/feeds/24.10 ./feeds.conf.default
           ./scripts/feeds update -a
