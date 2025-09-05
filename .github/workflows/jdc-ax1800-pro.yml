@@ -1,4 +1,4 @@
-name: IPQ60XX-24.10-6.12-WIFI
+name: jdc-ax1800-pro
 
 on:
   workflow_dispatch:
