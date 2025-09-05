@@ -18,7 +18,7 @@ env:
 
 jobs:
   ssh-job:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -26,7 +26,7 @@ jobs:
       - name: Maximize build space
         uses: easimon/maximize-build-space@v10
         with:
-          root-reserve-mb: 512
+          root-reserve-mb: 10240
           swap-size-mb: 1024
           remove-dotnet: 'true'
 
