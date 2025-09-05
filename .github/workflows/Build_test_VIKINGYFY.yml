@@ -23,6 +23,7 @@ env:
   TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
   TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
   TZ: Asia/Shanghai
+  REPO_URL: https://github.com/VIKINGYFY/immortalwrt
 
 jobs:
   build:
@@ -33,14 +34,20 @@ jobs:
 
       - name: Clone ImmortalWRT source
         run: |
-          git clone https://github.com/VIKINGYFY/immortalwrt.git immortalwrt -b ${{ github.event.inputs.branch }}
+          git clone --depth=1 --single-branch $REPO_URL -b ${{ github.event.inputs.branch }} ImmortalWRT
           cd immortalwrt
+          cp $GITHUB_WORKSPACE/feeds/24.10 ./feeds.conf.default
           ./scripts/feeds update -a
           ./scripts/feeds install -a
           
-      - name: SSH connection to Actions
+      - name: Start SSH via ngrok
+        uses: lbbboy/ssh2actions@main
+        with:
+          mode: ngrok
         env:
-          TELEGRAM_TOKEN : ${{ secrets.TELEGRAM_TOKEN }}
+          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+          NGROK_REGION: us
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        uses: garypang13/debugger-action@master
         if: ${{ github.event.inputs.ssh == 'true' }}
