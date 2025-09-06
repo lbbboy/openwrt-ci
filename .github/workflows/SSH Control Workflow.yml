@@ -22,13 +22,22 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        
+
+      - name: Backup workspace
+        run: |
+          mkdir -p /tmp/workspace_backup
+          cp -r $GITHUB_WORKSPACE/* /tmp/workspace_backup
+
       - name: Maximize build space
         uses: easimon/maximize-build-space@v10
         with:
-          root-reserve-mb: 10240
+          root-reserve-mb: 1024
           swap-size-mb: 1024
           remove-dotnet: 'true'
+
+      - name: Restore workspace
+        run: |
+          cp -r /tmp/workspace_backup/* $GITHUB_WORKSPACE/
 
       - name: SSH connection to Actions
         env:
