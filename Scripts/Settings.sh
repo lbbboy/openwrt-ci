@@ -64,3 +64,11 @@ if [[ "${WRT_TARGET^^}" == *"QUALCOMMAX"* ]]; then
 		echo "qualcommax set up nowifi successfully!"
 	fi
 fi
+
+# 隐藏顶部左侧的品牌文字
+cat >> package/feeds/luci/luci-theme-material/htdocs/luci-static/material/custom.css <<'EOF'
+
+a.brand {
+    display: none !important;
+}
+EOF
