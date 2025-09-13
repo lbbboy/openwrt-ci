@@ -55,6 +55,8 @@ env:
   WRT_SOURCE: ${{inputs.WRT_SOURCE}}
   WRT_PACKAGE: ${{inputs.WRT_PACKAGE}}
   WRT_TEST: ${{inputs.WRT_TEST}}
+  TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+  TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
 jobs:
   core:
@@ -249,3 +251,16 @@ jobs:
 
             内核版本：${{env.WRT_KVER}}
             插件列表：${{env.WRT_LIST}}
+      - name: Telegram notification
+        if: always()
+        continue-on-error: true
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then
+            curl -s -k --data chat_id="${{ env.TELEGRAM_CHAT_ID }}" \
+                 --data "text=🎉 OpenWrt ${{ env.VERSION }} ${{ env.WRT_TARGET }} 编译成功 😋 🔗 https://github.com/${{ github.repository }}/releases/latest/" \
+                 "https://api.telegram.org/bot${{ env.TELEGRAM_TOKEN }}/sendMessage"
+          else
+            curl -s -k --data chat_id="${{ env.TELEGRAM_CHAT_ID }}" \
+                 --data "text=❌ OpenWrt ${{ env.VERSION }} ${{ env.WRT_TARGET }} 编译失败 😂 🔗 https://github.com/${{ github.repository }}/releases/latest/" \
+                 "https://api.telegram.org/bot${{ env.TELEGRAM_TOKEN }}/sendMessage"
+          fi
