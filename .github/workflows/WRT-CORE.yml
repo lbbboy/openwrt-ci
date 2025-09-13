@@ -2,6 +2,8 @@
 name: WRT-CORE
 
 on:
+  workflow_call:
+  
 env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   WRT_CONFIG: ${{inputs.WRT_CONFIG}}
